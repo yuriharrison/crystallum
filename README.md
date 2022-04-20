@@ -1,2 +1,3 @@
-# crystallum
+# Crystallum
+
 Crystal utility library
