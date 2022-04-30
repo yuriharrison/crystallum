@@ -2,8 +2,13 @@ module Cl::Patterns
   abstract class Repository
     alias Key = Symbol | String
     Register = Hash(Tuple(Repository.class, Key), Repository.class).new
-    
+
+    # empty initializer
     def self.new(*a, **kw)
+    end
+    
+    # empty initializer
+    def initialize(*a, **kw)
     end
 
     def self.repository_context : Repository.class
@@ -12,12 +17,6 @@ module Cl::Patterns
     
     macro inherited
       {% unless @type.abstract? %}
-      def self.new
-        instance = {{@type}}.allocate
-        instance.initialize
-        instance
-      end
-
       def self.new(*a, **kw)
         instance = {{@type}}.allocate
         instance.initialize *a, **kw

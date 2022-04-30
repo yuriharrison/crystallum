@@ -42,7 +42,7 @@ describe Repository do
   end
 
   it ".create w/ args" do
-    instance = InterfaceX.create "test_b"
+    instance = InterfaceX.create "test_b", true
     instance.should be_a B
   end
 end
