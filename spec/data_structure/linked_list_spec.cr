@@ -1,9 +1,26 @@
 require "./spec_helper"
 
 describe LinkedList do
+  n = 10
+
+  it Iterator do
+    Queue(Int32).new.should be_a Iterator(Int32)
+  end
+
+  it "Iterator#accumulate" do
+    queue = Queue(Int32).build do
+      n.times { |i| push i }
+    end
+    accumulator, count = {0, 0}
+    queue.accumulate.each do |accumulate|
+      accumulator += count
+      accumulate.should eq accumulator
+      count += 1
+    end
+  end
+
   it FIFO do
-    n = 10
-    queue = Queue(typeof(n)).build do
+    queue = Queue(Int32).build do
       n.times { |i| push i }
     end
     n.times do |i|
@@ -13,7 +30,6 @@ describe LinkedList do
   end
 
   it FILO do
-    n = 10
     stack = Stack(typeof(n)).build do
       n.times { |i| push i }
     end
