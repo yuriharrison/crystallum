@@ -1,4 +1,4 @@
-module Cl::Hashing::MM3
+module Cl::Hashing::Murmur
   C1 = 0xcc9e2d51_u32
   C2 = 0x1b873593_u32
   C3 = 0x85ebca6b_u32

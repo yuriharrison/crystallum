@@ -9,16 +9,16 @@ DATA = [
   { 0xd0c5897b, 0x2760da08, "25 Jun 2021 at 07:15:00 PM" },
 ]
 
-describe MM3 do
+describe Murmur do
   it ".hash32 key" do
     DATA.each do |expected, _, key|
-      MM3.hash32(key).should eq expected
+      Murmur.hash32(key).should eq expected
     end
   end
 
   it ".hash32 key seed" do
     DATA.each do |_, expected, key|
-      MM3.hash32(key, SEED).should eq expected
+      Murmur.hash32(key, SEED).should eq expected
     end
   end
 end

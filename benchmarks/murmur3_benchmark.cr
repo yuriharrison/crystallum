@@ -6,10 +6,6 @@ end
 
 Benchmark.ips do |bm|
   bm.report "murmur3" do
-    Hashing::MM3.hash32 rand_bytes
-  end
-
-  bm.report "murmur3_old" do
-    Hashing::MM3.hash32_old rand_bytes
+    Hashing::Murmur.hash32 rand_bytes
   end
 end
