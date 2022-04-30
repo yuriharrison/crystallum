@@ -1,3 +1,5 @@
+require "bit_array"
+
 require "../hashing/murmur3"
 
 module Cl::DS
@@ -11,7 +13,7 @@ module Cl::DS
         unless 0 < error_rate < 1
   
       m = get_size n, error_rate
-      @array = Array(Bool).new m, false
+      @store = BitArray.new m
       @hash_count = get_hash_count m, n
       @seeds = Array(UInt32).new @hash_count { rand(UInt32) }
     end
@@ -30,15 +32,15 @@ module Cl::DS
   
     def add(key : String)
       @hash_count.times do |i|
-        index = Murmur.hash32(key, @seeds[i]) % @array.size
-        @array[index] = true
+        index = Murmur.hash32(key, @seeds[i]) % @store.size
+        @store[index] = true
       end
     end
   
     def has?(key : String) : Bool
       @hash_count.times do |i|
-        index = Murmur.hash32(key, @seeds[i]) % @array.size
-        return false unless @array[index]
+        index = Murmur.hash32(key, @seeds[i]) % @store.size
+        return false unless @store[index]
       end
       true
     end
