@@ -2,10 +2,17 @@ require "bit_array"
 
 require "../hashing/murmur3"
 
-module Cl::DS
-  class BloomFilter
-    include Cl::Hashing
+include Cl::Hashing
 
+def report(title = String.new)
+  m = Benchmark.memory do
+    yield
+  end
+  puts "#{m.humanize(base: 1024)}\t#{title}"
+end
+
+module Cl::DS
+  struct BloomFilter
     @hash_count = uninitialized Int32
   
     def initialize(n, error_rate=0.001)
