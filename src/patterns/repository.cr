@@ -1,20 +1,42 @@
 module Cl::Patterns
+  macro auto_wired
+    1
+  end
+
   abstract class Repository
     alias Key = Symbol | String
     Register = Hash(Tuple(Repository.class, Key), Repository.class).new
+    DefaultRegister = Hash(Repository.class, Repository.class).new
 
-    # empty initializer
     def self.new(*a, **kw)
     end
-    
-    # empty initializer
+
     def initialize(*a, **kw)
     end
 
-    def self.repository_context : Repository.class
-      Repository
+    def self.set_default(cls, key)
+      DefaultRegister[cls] = Register[{cls, key}]
+    end
+
+    def self.set_default_all(pairs : Hash(Repository.class, Key))
+      pairs.each do |cls, key|
+        self.set_default cls, key
+      end
     end
     
+    def self.create_for(symbol, *a, **kw) : Repository
+      self.instantiate Register[{ {{ @type }}, symbol }]
+    end
+
+    def self.create(*a, **kw) : Repository
+      self.instantiate DefaultRegister[{{ @type }}]
+    end
+
+    private def self.instantiate(cls, *a, **kw)
+      instance = cls.new *a, **kw
+      {{ @type }}.cast instance
+    end
+
     macro inherited
       {% unless @type.abstract? %}
       def self.new(*a, **kw)
@@ -29,11 +51,6 @@ module Cl::Patterns
       end
       
       {% end %}
-    end
-    
-    def self.create(symbol, *a, **kw) : Repository
-      key = { {{ @type }}, symbol }
-      Register[key].new(*a, **kw).as(Repository)
     end
   end
 end
