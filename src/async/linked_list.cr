@@ -13,7 +13,7 @@ module Cl::Async
       end
     end
 
-    def next : I
+    def next : I | Iterator::Stop
       safe do
         super
       end

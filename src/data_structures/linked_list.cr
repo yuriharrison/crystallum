@@ -6,8 +6,10 @@ require "../exceptions"
 
 module Cl::DS
   abstract class LinkedList(I)
+    include Iterator(I)
+
     @head : Node(I)?
-    
+
     def self.build(&block)
       ll = new
       with ll yield
@@ -15,6 +17,14 @@ module Cl::DS
     end
 
     abstract def push(item : I)
+
+    def each
+      head = @head
+      until head.nil?
+        yield head.value
+        head = current.next
+      end
+    end
 
     def peak : I?
       @head.nil? ? nil : @head.not_nil!.value
@@ -25,8 +35,8 @@ module Cl::DS
       self.next
     end
     
-    def next : I
-      raise EmptyException.new "LinkedList is empty" if empty?
+    def next : I | Iterator::Stop
+      return stop if empty?
       current = @head.not_nil!
       @head = current.next
       current.value
